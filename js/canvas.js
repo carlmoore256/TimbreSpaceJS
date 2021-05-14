@@ -1,7 +1,7 @@
 import * as THREE from './three/three.module.js';
 import Stats from './three/stats.module.js';
 import { OrbitControls } from './three/OrbitControls.js'
-// import GrainObject from './grain.js'
+import { VRButton } from './three/VRButton.js';
 
 let INTERSECTED, raycaster;
 const pointer = new THREE.Vector2;
@@ -9,6 +9,7 @@ const pointer = new THREE.Vector2;
 let audioContext, source;
 
 let m_MaxGrains = 10;
+let m_RadiusScl = 5;
 
 let renderer, stats, m_Scene, camera, guiData, m_GrainParent;
 
@@ -32,7 +33,11 @@ function init() {
 	renderer = new THREE.WebGLRenderer( { antialias: true } );
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
-	 document.body.appendChild( renderer.domElement );
+	document.body.appendChild( renderer.domElement );
+
+	// enable VR rendering ======
+	document.body.appendChild( VRButton.createButton( renderer ) );
+	renderer.xr.enabled = true;
 
 	const orbitControls = new OrbitControls( camera, renderer.domElement );
 	orbitControls.screenSpacePanning = true;
@@ -49,14 +54,17 @@ function init() {
 
 	// gui options =========
 	guiData = {
-		currentSound: './audio/CISSA2.wav',
-		bufferSize: 1024,
+		currentSound: './audio/WackyDrumsBF16.wav',
+		bufferSize: 2048,
 		hopSize: 512,
 	};
 
+	document.getElementById("audio_src").src = guiData.currentSound;
+	document.getElementById("audio_src").load();
+
 	// audio context
 	// audioContext
-	const htmlAudioElement = document.getElementById("audio");
+	const htmlAudioElement = document.getElementById("audio_src");
 	audioContext = new AudioContext();
 	source = audioContext.createMediaElementSource(htmlAudioElement);
 	source.connect(audioContext.destination);
@@ -100,7 +108,7 @@ function feature_extractor()
 				let position = new THREE.Vector3( features.mfcc[0]*posScalar, features.mfcc[1]*posScalar, features.mfcc[2]*posScalar );
 				let color = new THREE.Color( features.mfcc[3]*colScalar, features.mfcc[4]*colScalar, features.mfcc[5]*colScalar );
 
-				let radius = features.rms * 10;
+				let radius = features.rms * m_RadiusScl;
 
 				// color.setHex(0x44aa88);
 
@@ -131,29 +139,6 @@ function feature_extractor()
 	analyzer.start();
 }
 
-// input link to file, spawn grains in m_Grains
-// function spawnGrain(features) {
-// 	let position = new THREE.Vector3( features.mfcc[0], features.mfcc[1], features.mfcc[2] );
-// 	let color = new THREE.Color( features.mfcc[3], features.mfcc[4], features.mfcc[5] );
-// 	color.setHex(0x44aa88);
-//
-// 	// remember to add scale eventually
-// 	const geometry = new THREE.SphereGeometry( 1, 8, 8 );
-// 	// const material = new THREE.MeshBasicMaterial( {color: color} );
-// 	const material = new THREE.MeshBasicMaterial( {color: color} );
-// 	const object = new THREE.Mesh( geometry, material );
-//
-// 	const grain = new GrainObject(
-// 		object=object,
-// 		buffer=features.buffer,
-// 		position=position,
-// 		color=color,
-// 		features=features
-// 	)
-// 	m_Scene.add(object);
-// 	m_Grains.push(grain);
-// }
-
 function onPointerMove( event ) {
   pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
   pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
@@ -167,7 +152,13 @@ function onWindowResize() {
 
 function animate() {
 
-	requestAnimationFrame( animate );
+	renderer.setAnimationLoop( function () {
+
+		renderer.render( m_Scene, camera );
+
+	} );
+
+	// requestAnimationFrame( animate );
 
 	render();
 	// stats.update();
