@@ -1,0 +1,39 @@
+{
+  "name": "timbre-space-js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "public/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc-watch": "tsc -w",
+    "wp-watch": "webpack --config webpack.config.js --watch",
+    "wp-serve": "webpack serve",
+    "dev": "concurrently --kill-others \"npm run tsc-watch\" \"npm run wp-watch\" \"npm run wp-serve\"",
+    "build": "webpack --config webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carlmoore256/TimbreSpaceJS.git"
+  },
+  "author": "Carl Moore",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/carlmoore256/TimbreSpaceJS/issues"
+  },
+  "homepage": "https://github.com/carlmoore256/TimbreSpaceJS#readme",
+  "dependencies": {
+    "@types/dat.gui": "^0.7.7",
+    "@types/three": "^0.146.0",
+    "concurrently": "^7.6.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "dat.gui": "^0.7.9",
+    "html-webpack-plugin": "^5.5.0",
+    "meyda": "^5.5.1",
+    "three": "^0.147.0",
+    "tsc-watch": "^5.0.3"
+  },
+  "devDependencies": {
+    "webpack-cli": "^5.0.0",
+    "webpack-dev-server": "^4.11.1"
+  }
+}

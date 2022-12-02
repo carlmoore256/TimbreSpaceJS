@@ -1,0 +1,17 @@
+{
+    "all_features" : [
+        "rms",
+        "loudness",
+        "chroma",
+        "mfcc_1",
+        "mfcc_2",
+        "mfcc_3",
+        "mfcc_4",
+        "mfcc_5",
+        "mfcc_6",
+        "mfcc_7",
+        "mfcc_8",
+        "mfcc_9",
+        "mfcc_10"
+    ]
+}
