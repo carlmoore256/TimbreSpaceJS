@@ -4,4 +4,4 @@ node_modules/
 out/
 package-lock.json
 assets/
-.DS_STORE
+.DS_Store

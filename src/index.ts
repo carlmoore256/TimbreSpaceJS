@@ -4,7 +4,6 @@ import { initializeAudio, bindInitializeAudio } from "./audioContext";
 const DEFAULT_AUDIO = "assets/bass.wav";
 
 const foo = (audioContext : AudioContext) => {
-    console.log("YOOOO");
     const audioElem = document.getElementById("audio");
     const source = audioContext.createMediaElementSource(audioElem);
     console.log("Got foo audio ctx", audioContext, "SR", audioContext.sampleRate, "SOURCE", source);
